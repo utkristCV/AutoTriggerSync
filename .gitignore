@@ -163,3 +163,4 @@ cython_debug/
 ATS_Image/
 config.ini
 logs/
+README.md
