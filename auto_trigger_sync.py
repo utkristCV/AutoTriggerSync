@@ -255,7 +255,7 @@ url = config.get('V-Portal', 'url')
 vp_name = config.get('V-Portal', 'name')
 projects_list = config.get('Projects', 'projects')
 all_projects = [int(project) for project in projects_list.split(',')]
-webhook_url = config.get('Slack', 'channel')
+webhook_url = config.get('Slack', 'webhook')
 
 chrome_options = Options()
 chrome_options.add_argument("start-maximized")
