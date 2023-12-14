@@ -161,6 +161,6 @@ cython_debug/
 
 # Others
 ATS_Image/
-config.ini
 logs/
 README.md
+config.ini
