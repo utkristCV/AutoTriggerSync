@@ -160,7 +160,4 @@ cython_debug/
 .idea/
 
 # Others
-ATS_Image/
-logs/
-README.md
 config.ini
