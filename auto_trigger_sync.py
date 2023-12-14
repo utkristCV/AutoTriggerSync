@@ -8,8 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import datetime
+import requests
 from bs4 import BeautifulSoup
-from slacker import Slacker
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
@@ -24,10 +24,23 @@ def log(text):
 
 
 def alert_slack(message):
+    payload = {
+        "text": f"*{vp_name}*: {message}",
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+    }
+
     try:
-        slack.chat.post_message(f'#{channel}', f"*{vp_name}*: {message}")
-    except Exception as e:
-        log(f'ERROR || Sending Alert || {e}')
+        response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        log(f"ERROR ||  HTTP Error: {err}")
+    except requests.exceptions.ConnectionError as err:
+        log(f"ERROR ||  Error Connecting: {err}")
+    except requests.exceptions.RequestException as err:
+        log(f"ERROR || {err}")
 
 
 def check_loading():
@@ -242,10 +255,7 @@ url = config.get('V-Portal', 'url')
 vp_name = config.get('V-Portal', 'name')
 projects_list = config.get('Projects', 'projects')
 all_projects = [int(project) for project in projects_list.split(',')]
-channel = config.get('Slack', 'channel')
-
-# Adding Slack
-slack = Slacker(os.environ.get('Slack_Bot_API_Token'))
+webhook_url = config.get('Slack', 'channel')
 
 chrome_options = Options()
 chrome_options.add_argument("start-maximized")
