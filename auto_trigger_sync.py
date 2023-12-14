@@ -24,7 +24,10 @@ def log(text):
 
 
 def alert_slack(message):
-    slack.chat.post_message(f'#{channel}', f"*{vp_name}*: {message}")
+    try:
+        slack.chat.post_message(f'#{channel}', f"*{vp_name}*: {message}")
+    except Exception as e:
+        log(f'ERROR || Sending Alert || {e}')
 
 
 def check_loading():
